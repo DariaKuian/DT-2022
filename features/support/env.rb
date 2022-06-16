@@ -1,6 +1,13 @@
 require 'capybara/cucumber'
+require 'require_all'
 require 'rspec/expectations'
 require 'selenium-webdriver'
+require 'site_prism'
+
+require_all 'models'
+require_all 'modules'
+require_all 'page_objects/pages'
+
 
 def chrome_options
   Selenium::WebDriver::Chrome::Options.new(args: %w[window-size=1800,1000])
@@ -13,9 +20,4 @@ Before do
   end
 end
 
-def get_random_string(length=20)
-  source=("a".."z").to_a + ("A".."Z").to_a + (0..9).to_a
-  key=""
-  length.times{ key += source[rand(source.size)].to_s }
-  return key
-end
+World(FeatureHelper)
