@@ -1,8 +1,6 @@
 Feature: Sign in feature
 
-    Scenario: User can log in
-      Given Gitlab login page is opened
-      When I fill in username
-      And I fill in password
-      And I click sign in button
-      Then I see that user is logged in
+    Scenario: User can login using helper module
+      Given Gitlab sign in page is opened
+      When I sign in as a preregistered user
+      Then I see that new user is logged in
