@@ -8,6 +8,7 @@ require 'oauth'
 
 require_all 'models'
 require_all 'modules'
+require_all 'page_objects/sections'
 require_all 'page_objects/pages'
 
 PROJECT_OWNER_LABEL = 'Project Owner'
@@ -30,6 +31,7 @@ After do
 end
 
 World(FeatureHelper)
+World(IssueHelper)
 
 RestClient.add_before_execution_proc do |req, params|
   puts params

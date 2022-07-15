@@ -13,4 +13,9 @@ module FeatureHelper
     @sign_up_page.password_field.set user.password
     @sign_up_page.register_btn.click
   end
+
+  def log_out
+    find('li[data-qa-selector="user_menu"]').click
+    find('a[data-qa-selector="sign_out_link"]').click
+  end
 end

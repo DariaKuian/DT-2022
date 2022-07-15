@@ -18,4 +18,8 @@ module APIHelper
 
     RestClient.post("#{@base_url}/users", payload, @headers)
   end
+
+  def self.delete(user)
+    RestClient.delete("#{@base_url}/users/#{user.id}", @headers)
+  end
 end

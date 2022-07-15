@@ -1,9 +1,10 @@
 require 'ffaker'
 
 class User
-  attr_reader :username, :password, :firstname, :lastname, :email, :position
+  attr_reader :id, :username, :password, :firstname, :lastname, :email, :position
 
   def initialize
+    @id = 0
     @username = FFaker::Random.rand.to_s
     @password = FFaker::Internet.password
     @firstname = FFaker::Name.first_name
@@ -26,8 +27,13 @@ class User
     @position = position
   end
 
+  def set_id(id)
+    @id = id
+  end
+
   def to_json
     {
+      :id => @id,
       :username => @username,
       :password => @password,
       :firstname => @firstname,

@@ -14,9 +14,8 @@ end
 
 When(/^I log in to gitlab with 'Project Owner' user$/) do
   load_sign_in_page
-  r = get_user_from_file PROJECT_OWNER_LABEL
-  sign_in_user r.username, r.password
-  # sleep 6000
+  user = get_user_from_file PROJECT_OWNER_LABEL
+  sign_in_user user.username, user.password
 end
 
 def get_user_from_file(position)
@@ -31,4 +30,10 @@ end
 def load_sign_in_page
   @sign_in_page = SignInPage.new
   @sign_in_page.load
+end
+
+And(/^I log in to gitlab with 'Developer' user$/) do
+  load_sign_in_page
+  user = get_user_from_file DEVELOPER_LABEL
+  sign_in_user user.username, user.password
 end
