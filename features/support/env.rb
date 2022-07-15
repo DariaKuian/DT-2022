@@ -1,6 +1,19 @@
 require 'capybara/cucumber'
+require 'require_all'
 require 'rspec/expectations'
 require 'selenium-webdriver'
+require 'site_prism'
+require 'rest-client'
+require 'oauth'
+
+require_all 'models'
+require_all 'modules'
+require_all 'page_objects/sections'
+require_all 'page_objects/pages'
+
+PROJECT_OWNER_LABEL = 'Project Owner'
+DEVELOPER_LABEL = 'Developer'
+USERS_FILENAME = 'users.txt'
 
 def chrome_options
   Selenium::WebDriver::Chrome::Options.new(args: %w[window-size=1800,1000])
@@ -13,9 +26,13 @@ Before do
   end
 end
 
-def get_random_string(length=20)
-  source=("a".."z").to_a + ("A".."Z").to_a + (0..9).to_a
-  key=""
-  length.times{ key += source[rand(source.size)].to_s }
-  return key
+After do
+  File.delete(USERS_FILENAME) if File.exist?(USERS_FILENAME)
+end
+
+World(FeatureHelper)
+World(IssueHelper)
+
+RestClient.add_before_execution_proc do |req, params|
+  puts params
 end

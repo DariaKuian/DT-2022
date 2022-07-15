@@ -1,19 +1,39 @@
-Given(/^Gitlab login page is opened$/) do
-  visit 'https://gitlab.testautomate.me/users/sign_in'
+Given(/^Gitlab sign in page is opened$/) do
+  load_sign_in_page
 end
 
-When(/^I fill in username$/) do
-  find('#user_login').set 'uitestuser'
+When(/^I sign in as a preregistered user$/) do
+  user_credentials = JSON.parse(File.read('users.json'))
+  sign_in_user user_credentials['username'], user_credentials['password']
 end
 
-And(/^I fill in password$/) do
-  find('#user_password').set 'testpassword123'
+Then(/^I see that new user is logged in$/) do
+  @welcome_page = WelcomePage.new
+  expect(@welcome_page.welcome_msg.text).to include 'Welcome to GitLab'
 end
 
-And(/^I click sign in button$/) do
-  find('#new_user > div.submit-container.move-submit-down > button').click
+When(/^I log in to gitlab with 'Project Owner' user$/) do
+  load_sign_in_page
+  user = get_user_from_file PROJECT_OWNER_LABEL
+  sign_in_user user.username, user.password
 end
 
-Then(/^I see that user is logged in$/) do
-  expect(find(:xpath, '//*[@id="content-body"]/div[2]/div[1]/h2').text).to eql 'Welcome to GitLab'
+def get_user_from_file(position)
+  users = []
+  f = File.open(USERS_FILENAME, "r")
+  f.each_line {|line| users << line.split("\n") }
+  user_data = users.find { |user_data| JSON.parse(user_data[0])["position"] == position }
+  expect(user_data.length).to eql 1
+  OpenStruct.new(JSON.parse(user_data[0]))
+end
+
+def load_sign_in_page
+  @sign_in_page = SignInPage.new
+  @sign_in_page.load
+end
+
+And(/^I log in to gitlab with 'Developer' user$/) do
+  load_sign_in_page
+  user = get_user_from_file DEVELOPER_LABEL
+  sign_in_user user.username, user.password
 end
